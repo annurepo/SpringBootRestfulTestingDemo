@@ -1,0 +1,42 @@
+image: openjdk:17-alpine
+
+stages:
+  - test
+  - codequality
+  - build
+  - publish
+  - deploy
+  
+services:
+  - 'mysql:5.5'
+  
+variables:
+  MYSQL_DATABASE: notedbdb
+  MYSQL_URL: mysql://localhost:3306/notedbdb
+  MYSQL_USER: app_root
+  MYSQL_PASSWORD: root
+  MYSQL_ROOT_PASSWORD: root
+
+maven-test:
+  image: maven:3.8.3-openjdk-17
+  stage: test
+  script: "mvn test"
+
+maven-build:
+  image: maven:3.8.3-openjdk-17
+  stage: build
+  script: "mvn package"
+  artifacts:
+    paths:
+      - target/*.jar
+      
+#publish:
+#  image: docker:latest
+#  stage: publish
+#  services:
+#    -
+#  script:
+#    - 
+#
+#deploy:
+#
